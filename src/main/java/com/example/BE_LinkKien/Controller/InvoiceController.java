@@ -4,6 +4,7 @@ import com.example.BE_LinkKien.Models.Brand;
 import com.example.BE_LinkKien.Service.BrandService;
 import com.example.BE_LinkKien.Service.InvoiceService;
 import com.example.BE_LinkKien.dto.BrandDTO;
+import com.example.BE_LinkKien.dto.CreateInvoiceDTO;
 import com.example.BE_LinkKien.dto.InvoiceDTO;
 import com.example.BE_LinkKien.payload.response.ResponseObject;
 import org.modelmapper.ModelMapper;
@@ -40,7 +41,7 @@ public class InvoiceController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createInvoice(@RequestBody InvoiceDTO data) throws IOException {
+    public ResponseEntity<?> createInvoice(@RequestBody InvoiceDTO data) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create invoice successfully",invoiceService.createInvpoce(data)));
     }
 
@@ -54,6 +55,10 @@ public class InvoiceController {
     public ResponseEntity<?> getInvoice(@PathVariable Integer id) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Get invoice successfully",invoiceService.getInvoiceById(id)));
     }
-
+    @PutMapping("/updateStatus")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateStatus(@RequestParam Integer id,@RequestParam boolean status) {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all invoice successfully",invoiceService.updateStatusInvoice(id,status)));
+    }
 
 }

@@ -28,6 +28,7 @@ public class Product {
     private Integer idCategory;
     @Column(nullable = true)
     private Integer idEvent;
+    private Integer quantity;
 
     //==================
     //Audit
@@ -50,11 +51,11 @@ public class Product {
     //==================
 
     //Brand-> product
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name ="idBrand",nullable = true,insertable = false,updatable = false)
     private Brand brand;
     //Category->product
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name ="idCategory",nullable = true,insertable = false,updatable = false)
     private Category category;
     //Event->product

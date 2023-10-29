@@ -28,7 +28,6 @@ public class CategoryService {
             category.setStatus(false);
             Category categoryInserted = categoryRepository.save(category);
             return categoryInserted;
-
         }else {
             throw new CustomException("Category is exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -71,5 +70,4 @@ public class CategoryService {
             throw new CustomException("Category isn't exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
-
 }

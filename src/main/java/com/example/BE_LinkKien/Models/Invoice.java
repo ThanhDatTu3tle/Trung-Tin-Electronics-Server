@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "Invoice")
 @Data
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Invoice {
     @Id
@@ -27,4 +28,16 @@ public class Invoice {
     private Boolean status;
     private Double total;
     private String payment;
+    //==================
+    //Audit
+
+//    @CreatedDate
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+
+//    @Column(name = "updated_at")
+    @LastModifiedDate
+    private Timestamp updatedAt;
+    //==================
 }

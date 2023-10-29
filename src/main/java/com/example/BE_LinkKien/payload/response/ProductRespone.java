@@ -1,8 +1,6 @@
 package com.example.BE_LinkKien.payload.response;
 
-import com.example.BE_LinkKien.Models.Event;
-import com.example.BE_LinkKien.Models.ImageProduct;
-import com.example.BE_LinkKien.Models.Specification;
+import com.example.BE_LinkKien.Models.*;
 import com.example.BE_LinkKien.dto.ImageProductDTO;
 import com.example.BE_LinkKien.dto.SpecificationDTO;
 import com.example.BE_LinkKien.payload.resquest.ImageProductRequest;
@@ -22,13 +20,14 @@ public class ProductRespone {
     private List<SpecificationDTO> specification;
     private List<ImageProductDTO> imageProducts;
     private Double price;
-    private String brand;
+    private Brand brand;
     private Event event;
     private Boolean status;
-    private String category;
+    private Category category;
     private String createdBy;
     private Timestamp createdAt;
     private String updatedBy;
     private Timestamp updatedAt;
+    private Integer quantity;
 
 }

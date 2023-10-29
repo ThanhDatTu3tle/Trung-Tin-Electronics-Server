@@ -7,8 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Data
-public class InvoiceDTO {
-    private Integer id;
+public class CreateInvoiceDTO {
     private String customerName;
     private String phone;
     private String address;
@@ -18,8 +17,4 @@ public class InvoiceDTO {
     private Double total;
     private String payment;
     private List<InvoiceDetailDTO> invoiceDetail;
-    private String createdBy;
-    private Timestamp createdAt;
-    private String updatedBy;
-    private Timestamp updatedAt;
 }
