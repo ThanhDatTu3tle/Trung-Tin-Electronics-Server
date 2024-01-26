@@ -24,10 +24,14 @@ public class Product {
 //    private List<Specification> specification;
     private Double price;
     private Boolean status;
+    private Integer discount;
+    private Double promotional;
     private Integer idBrand;
     private Integer idCategory;
     @Column(nullable = true)
     private Integer idEvent;
+    @Column(nullable = true)
+//    private Integer idCombo;
     private Integer quantity;
 
     //==================
@@ -62,4 +66,8 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name ="idEvent",nullable = true,insertable = false,updatable = false)
     private Event event;
+    //Combo ->product
+//    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+//    @JoinColumn(name ="idCombo",nullable = true,insertable = false,updatable = false)
+//    private Combo combo;
 }

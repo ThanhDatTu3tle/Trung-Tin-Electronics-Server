@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Combo")
@@ -17,4 +18,6 @@ public class Combo {
     private String image;
     private Double price;
     private Double cost;
+    private Integer discount;
+    private Boolean status;
 }

@@ -23,6 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> regis(@RequestBody User user) {
         return userService.signup(modelMapper.map(user, User.class));
     }

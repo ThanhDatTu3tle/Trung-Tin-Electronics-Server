@@ -3,19 +3,11 @@ package com.example.BE_LinkKien.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
+import java.util.List;
 
 @Data
-public class ProductDTO {
-    private String id;
-    private String name;
-    private String description;
-    //    private List<Specification> specification;
-    private Double price;
-    private Boolean status;
-    private Integer idBrand;
-    private Integer idCategory;
+public class EventDTO {
     private Integer idEvent;
-    private Integer quantity;
+    private List<String> idProducts;
 
 }

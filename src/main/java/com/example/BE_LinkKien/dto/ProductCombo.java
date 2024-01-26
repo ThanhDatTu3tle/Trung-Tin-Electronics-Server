@@ -6,8 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ComboDTO {
-    private Integer idCombo;
-    private List<String> idProducts;
-
+public class ProductCombo {
+    private String idProduct;
+    private Integer quantity;
 }

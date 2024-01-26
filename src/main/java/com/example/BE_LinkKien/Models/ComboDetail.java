@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "Combo_Detail")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-public class Combo_Detail {
+public class ComboDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,12 +18,12 @@ public class Combo_Detail {
     private Integer productNumber;
 
     //product -> detail
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST,optional = false)
     @JoinColumn(name ="idCombo",nullable = true,insertable = false,updatable = false)
     private Combo combo;
 
     //combo -> detail
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST,optional = false)
     @JoinColumn(name ="idProduct",nullable = true,insertable = false,updatable = false)
     private Product product;
 }

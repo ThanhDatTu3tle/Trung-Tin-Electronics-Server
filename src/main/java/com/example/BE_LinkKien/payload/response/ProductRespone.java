@@ -23,6 +23,8 @@ public class ProductRespone {
     private Brand brand;
     private Event event;
     private Boolean status;
+    private Integer discount;
+    private Double promotional;
     private Category category;
     private String createdBy;
     private Timestamp createdAt;

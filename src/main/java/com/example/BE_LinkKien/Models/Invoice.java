@@ -26,6 +26,7 @@ public class Invoice {
     private String email;
     private String content;
     private Boolean status;
+    private Boolean confirm;
     private Double total;
     private String payment;
     //==================

@@ -1,24 +1,24 @@
 package com.example.BE_LinkKien.Service;
 
 
+import com.example.BE_LinkKien.Images.Image;
 import com.example.BE_LinkKien.Models.*;
 import com.example.BE_LinkKien.Repository.*;
+import com.example.BE_LinkKien.dto.EventDTO;
 import com.example.BE_LinkKien.dto.ImageProductDTO;
 import com.example.BE_LinkKien.dto.SpecificationDTO;
 import com.example.BE_LinkKien.exception.CustomException;
 import com.example.BE_LinkKien.payload.response.ProductRespone;
 import com.example.BE_LinkKien.payload.resquest.ProductRequest;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityListeners;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,9 +40,11 @@ public class ProductService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private Image imageService;
 
 
-    public Product createProduct(ProductRequest product)
+    public Product createProduct(ProductRequest product) throws IOException
     {
         if(!productRepository.existsById(product.getId())) {
             try{
@@ -54,6 +56,8 @@ public class ProductService {
                 _product.setDescription(product.getDescription());
                 _product.setPrice(product.getPrice());
                 _product.setStatus(true);
+                _product.setDiscount(product.getDiscount());
+                _product.setPromotional(product.getPromotional());
                 _product.setIdBrand(product.getIdBrand());
                 _product.setIdCategory(product.getIdCategory());
                 _product.setIdEvent(null);
@@ -110,6 +114,8 @@ public class ProductService {
                 productRespone.setCategory(categoryRepository.findCategoryById(e.getIdCategory()));
                 productRespone.setEvent(eventRepository.findEventById(e.getIdEvent()));
                 productRespone.setStatus(e.getStatus());
+                productRespone.setDiscount(e.getDiscount());
+                productRespone.setPromotional(e.getPromotional());
                 productRespone.setCreatedBy(userRepository.findUserById(e.getCreatedBy()).getEmail());
                 productRespone.setCreatedAt(e.getCreatedAt());
                 productRespone.setUpdatedBy(userRepository.findUserById(e.getUpdatedBy()).getEmail());
@@ -147,6 +153,8 @@ public class ProductService {
         productRespone.setCategory(categoryRepository.findCategoryById(products.getIdCategory()));
         productRespone.setEvent(eventRepository.findEventById(products.getIdEvent()));
         productRespone.setStatus(products.getStatus());
+        productRespone.setDiscount(products.getDiscount());
+        productRespone.setPromotional(products.getPromotional());
         productRespone.setCreatedBy(userRepository.findUserById(products.getCreatedBy()).getEmail());
         productRespone.setCreatedAt(products.getCreatedAt());
         productRespone.setUpdatedBy(userRepository.findUserById(products.getUpdatedBy()).getEmail());
@@ -185,6 +193,8 @@ public class ProductService {
                     productRespone.setCategory(categoryRepository.findCategoryById(e.getIdCategory()));
                     productRespone.setEvent(eventRepository.findEventById(e.getIdEvent()));
                     productRespone.setStatus(e.getStatus());
+                    productRespone.setDiscount(e.getDiscount());
+                    productRespone.setPromotional(e.getPromotional());
                     productRespone.setCreatedBy(userRepository.findUserById(e.getCreatedBy()).getEmail());
                     productRespone.setCreatedAt(e.getCreatedAt());
                     productRespone.setUpdatedBy(userRepository.findUserById(e.getUpdatedBy()).getEmail());
@@ -209,6 +219,8 @@ public class ProductService {
             _product.setDescription(body.getDescription());
             _product.setPrice(body.getPrice());
 //            _product.setStatus(body.isStatus());
+//            _product.setDiscount(body.getDiscount());
+//            _product.setPromotional(body.getPromotional());
             _product.setIdBrand(body.getIdBrand());
             _product.setIdCategory(body.getIdCategory());
             _product.setIdEvent(null);
@@ -243,7 +255,7 @@ public class ProductService {
         }
     }
 
-    public Product updateEventProduct(String id, Integer event) {
+    public Product updateDiscount(String id, Integer discount, Double promotional) {
         try{
             if(id == null)
             {
@@ -254,20 +266,47 @@ public class ProductService {
             Product productSaved = new Product();
             if(_product !=null)
             {
-                if(event ==0)
-                {
-                    _product.setIdEvent(null);
-                }
-                else {
-                    _product.setIdEvent(event);
-                }
+                _product.setDiscount(discount);
+                _product.setPromotional(promotional);
                 productSaved = productRepository.save(_product);
             } else
             {
                 throw new CustomException("Product is not exists", HttpStatus.BAD_REQUEST);
             }
 
-            return productRepository.findProductById(id);
+            return productSaved;
+        } catch (Exception e) {
+            throw new CustomException("Can not update discount & price product", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public List<Product> updateEventProduct(EventDTO data) {
+        try{
+            if(data == null)
+            {
+                throw new CustomException("ID is null", HttpStatus.BAD_REQUEST);
+            }
+            List<Product> listReturn = new ArrayList<>();
+            data.getIdProducts().forEach((e)->{
+                Product _product = productRepository.findProductById(e);
+                Product productSaved = new Product();
+                if(_product !=null)
+                {
+                    if(data.getIdEvent() ==0)
+                    {
+                        _product.setIdEvent(null);
+                    }
+                    else {
+                        _product.setIdEvent(data.getIdEvent());
+                    }
+                    productSaved = productRepository.save(_product);
+                    listReturn.add(productSaved);
+                } else
+                {
+                    throw new CustomException("Product is not exists", HttpStatus.BAD_REQUEST);
+                }
+            });
+            return listReturn;
         } catch (Exception e) {
             throw new CustomException("Can not update event for product", HttpStatus.NOT_FOUND);
         }
@@ -347,6 +386,7 @@ public class ProductService {
                 _product.setDescription(product.getDescription());
                 _product.setPrice(product.getPrice());
 //            _product.setStatus(true);
+//            _product.setDiscount(product.getDiscount());
                 _product.setIdBrand(product.getIdBrand());
                 _product.setIdCategory(product.getIdCategory());
 //            _product.setIdEvent(null);
@@ -376,7 +416,7 @@ public class ProductService {
 
                 product.getImageProducts().forEach((e)->{
                     ImageProduct imageProduct = new ImageProduct();
-                    imageProduct.setImage(e.getImage());
+//                    imageProduct.setImage(e.getImage());
                     imageProduct.setIdProduct(product.getId());
                     imageProductList.add(imageProduct);
                 });

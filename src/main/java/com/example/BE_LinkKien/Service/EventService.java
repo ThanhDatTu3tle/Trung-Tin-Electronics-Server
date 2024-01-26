@@ -27,7 +27,7 @@ public class EventService {
             Event brandInserted = eventRepository.save(brand);
             return brandInserted;
         }else {
-            throw new CustomException("Brand is exists", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException("Event is exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

@@ -39,8 +39,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/v1/product/getAll").permitAll()
                     .antMatchers("/api/v1/product/getProduct/{id}").permitAll()
                     .antMatchers("/api/v1/product/getAllByIdCategory").permitAll()
+                    .antMatchers("/api/v1/combo/getAll").permitAll()
                     .antMatchers("/api/v1/invoice/create").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers("/images/**").permitAll()
+
+                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(((request, response, authException) -> {
                     Map<String, Object> responseMap = new HashMap<>();

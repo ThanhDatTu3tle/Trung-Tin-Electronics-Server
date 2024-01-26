@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -22,7 +25,7 @@ public class CategoryController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createCategory(@RequestParam String name, @RequestParam String image) {
+    public ResponseEntity<?> createCategory(@RequestParam String name, @RequestParam MultipartFile image) throws IOException {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create category successfully",categoryService.createCategory(name,image)));
     }
 
@@ -36,13 +39,13 @@ public class CategoryController {
     }
     @PutMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> editCategory(@PathVariable Integer id,@RequestBody Category category1) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit category successfully",categoryService.editCategory(category1)));
+    public ResponseEntity<?> editCategory(@PathVariable Integer id, @RequestParam String name,@RequestParam MultipartFile image)throws IOException  {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit category successfully",categoryService.editCategory(id,name,image)));
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer id) throws IOException  {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Delete category successfully",null));
     }

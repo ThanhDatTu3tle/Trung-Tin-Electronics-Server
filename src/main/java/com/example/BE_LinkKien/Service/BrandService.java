@@ -1,6 +1,7 @@
 package com.example.BE_LinkKien.Service;
 
 
+import com.example.BE_LinkKien.Images.Image;
 import com.example.BE_LinkKien.Models.Brand;
 import com.example.BE_LinkKien.Models.Category;
 import com.example.BE_LinkKien.Repository.BrandRepository;
@@ -11,7 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.font.MultipleMaster;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -22,67 +28,82 @@ import java.util.Optional;
 public class BrandService {
     @Autowired
     private BrandRepository brandRepository;
+    @Autowired
+    private Image imageService;
+
     public Brand createBrand(String name, String image) {
-        if(!brandRepository.existsByName(name)) {
+        if (!brandRepository.existsByName(name)) {
             Brand brand = new Brand();
             brand.setName(name);
             brand.setImage(image);
             Brand brandInserted = brandRepository.save(brand);
             return brandInserted;
 
-        }else {
+        } else {
             throw new CustomException("Brand is exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-
-    public Brand createBrandTest(String name, String image) {
-
-        if(!brandRepository.existsByName(name)) {
+    public Brand createBrandTest(String name, MultipartFile image) throws IOException {
+        if (!brandRepository.existsByName(name)) {
             Brand brand = new Brand();
             brand.setName(name);
-            brand.setImage(image);
+            brand.setImage(imageService.saveImage("images/brand", image));
             Brand brandInserted = brandRepository.save(brand);
             return brandInserted;
 
-        }else {
+        } else {
             throw new CustomException("Brand is exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
+
     public List<Brand> getAllBrand() {
         List<Brand> brandList = brandRepository.findAll();
-        if(brandList == null) {
+        if (brandList == null) {
             throw new CustomException("The brand list are empty", HttpStatus.NOT_FOUND);
         }
         return brandList;
     }
 
-    public Optional<Brand> getById(Integer id){
+    public Optional<Brand> getById(Integer id) {
         Optional<Brand> _brand = brandRepository.findById(id);
-        if(_brand == null) {
+        if (_brand == null) {
             throw new CustomException("Brand isn't exist", HttpStatus.NOT_FOUND);
         }
         return _brand;
     }
 
-    public Brand editBrand(Brand body) {
-        Optional<Brand> _brand = brandRepository.findById(body.getId());
-        return _brand.map(category1 -> {
-            category1.setName(body.getName());
-            category1.setImage(body.getImage());
-            Brand brandInserted = brandRepository.save(category1);
-            return brandInserted;
-        }).orElseThrow(() -> new CustomException("Brand not found", HttpStatus.NOT_FOUND));
+    public Brand editBrand(Integer id, String name, MultipartFile image) throws IOException {
+        Brand _brand = brandRepository.findBrandById(id);
+        if (_brand != null) {
+            try {
+                if (_brand.getImage() != null) {
+                    imageService.deleteImage(_brand.getImage());
+                }
+                _brand.setName(name);
+                _brand.setImage(imageService.saveImage("images/brand", image));
+                Brand saved = brandRepository.save(_brand);
+                return saved;
+            } catch (Exception e) {
+                throw new CustomException("Can't delete brand", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            throw new CustomException("Brand isn't exists", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
-    public void deleteBrand (Integer id){
-        if(brandRepository.existsById(id)) {
+    public void deleteBrand(Integer id) {
+        if (brandRepository.existsById(id)) {
+            Brand _brand = brandRepository.findBrandById(id);
             try {
+                if (_brand.getImage() != null) {
+                    imageService.deleteImage(_brand.getImage());
+                }
                 brandRepository.deleteById(id);
             } catch (Exception e) {
                 throw new CustomException("Can't delete brand", HttpStatus.NOT_FOUND);
             }
-        }else {
+        } else {
             throw new CustomException("Brand isn't exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }

@@ -54,6 +54,7 @@ public class InvoiceService {
             invoice.setEmail(data.getEmail());
             invoice.setContent(data.getContent());
             invoice.setStatus(data.getStatus());
+            invoice.setConfirm(data.getConfirm());
             invoice.setTotal(data.getTotal());
             invoice.setPayment(data.getPayment());
             invoice.setCreatedAt(timestamp);
@@ -93,6 +94,7 @@ public class InvoiceService {
             invoiceDTO.setContent(e.getContent());
             invoiceDTO.setAddress(e.getAddress());
             invoiceDTO.setStatus(e.getStatus());
+            invoiceDTO.setConfirm(e.getConfirm());
             invoiceDTO.setTotal(e.getTotal());
             invoiceDTO.setPayment(e.getPayment());
 
@@ -122,6 +124,7 @@ public class InvoiceService {
         invoiceDTO.setContent(invoice.getContent());
         invoiceDTO.setAddress(invoice.getAddress());
         invoiceDTO.setStatus(invoice.getStatus());
+        invoiceDTO.setConfirm(invoice.getConfirm());
         invoiceDTO.setTotal(invoice.getTotal());
         invoiceDTO.setPayment(invoice.getPayment());
 
@@ -161,6 +164,34 @@ public class InvoiceService {
             return invoiceSaved;
         } catch (Exception e) {
             throw new CustomException("Can not update status invoice", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public Invoice updateConfirmInvoice(Integer id, boolean confirm) {
+        try{
+            if(id == null)
+            {
+                throw new CustomException("ID is null", HttpStatus.BAD_REQUEST);
+            }
+
+            Invoice _invoice = invoiceRepository.findInvoiceById(id);
+            List<InvoiceDetail> invoiceDetailList = invoiceDetailRepository.findAllByIdInvoice(id);
+            Invoice invoiceSaved = new Invoice();
+            if(_invoice !=null)
+            {
+                _invoice.setConfirm(confirm);
+                invoiceDetailList.forEach((e)->{
+                    productService.updateQuantity(e.getIdProduct(),false,e.getNumber());
+                });
+                invoiceSaved = invoiceRepository.save(_invoice);
+            } else
+            {
+                throw new CustomException("Invoice is not exists", HttpStatus.BAD_REQUEST);
+            }
+
+            return invoiceSaved;
+        } catch (Exception e) {
+            throw new CustomException("Can not update confirm invoice", HttpStatus.NOT_FOUND);
         }
     }
 

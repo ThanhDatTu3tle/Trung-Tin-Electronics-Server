@@ -58,7 +58,12 @@ public class InvoiceController {
     @PutMapping("/updateStatus")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateStatus(@RequestParam Integer id,@RequestParam boolean status) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all invoice successfully",invoiceService.updateStatusInvoice(id,status)));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Update status successfully",invoiceService.updateStatusInvoice(id,status)));
     }
 
+    @PutMapping("/updateConfirm")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateConfirm(@RequestParam Integer id,@RequestParam boolean confirm) {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Update confirm successfully",invoiceService.updateConfirmInvoice(id,confirm)));
+    }
 }

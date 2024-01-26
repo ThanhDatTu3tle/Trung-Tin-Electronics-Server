@@ -5,6 +5,7 @@ import com.example.BE_LinkKien.Service.BrandService;
 import com.example.BE_LinkKien.payload.response.ResponseObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,15 +42,17 @@ public class BrandController {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createBrand(@RequestParam String name, @RequestParam String image) {
+    public ResponseEntity<?> createBrand(@RequestParam String name, @RequestParam MultipartFile image)throws IOException {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create brand successfully",brandService.createBrandTest(name,image)));
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllCategory() {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all category successfully",brandService.getAllBrand()));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all brand successfully",brandService.getAllBrand()));
     }
     @GetMapping("/getBrand/{id}")
     public ResponseEntity<?> getBrand(@PathVariable Integer id) {
@@ -57,8 +60,8 @@ public class BrandController {
     }
     @PutMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> editBrand(@PathVariable Integer id,@RequestBody Brand brand) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit brand successfully",brandService.editBrand(brand)));
+    public ResponseEntity<?> editBrand(@PathVariable Integer id,@RequestParam String name,@RequestParam MultipartFile file) throws IOException{
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit brand successfully",brandService.editBrand(id,name,file)));
     }
 
     @DeleteMapping("/delete/{id}")

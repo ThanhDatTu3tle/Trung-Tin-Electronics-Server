@@ -17,8 +17,8 @@ public class ProductRequest {
     private ArrayList<String> specification;
     private ArrayList<ImageProductRequest> imageProducts;
     private Double price;
+    private Integer discount;
+    private Double promotional;
     private Integer idBrand;
     private Integer idCategory;
-
-
 }

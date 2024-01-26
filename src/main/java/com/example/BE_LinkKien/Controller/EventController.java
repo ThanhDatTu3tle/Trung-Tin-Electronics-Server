@@ -27,8 +27,8 @@ public class EventController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createBrand(@RequestParam String name, @RequestParam Integer disscount) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully",eventService.createEvent(name,disscount)));
+    public ResponseEntity<?> createBrand(@RequestParam String name, @RequestParam Integer discount) {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully",eventService.createEvent(name,discount)));
     }
 
     @GetMapping("/getAll")
@@ -41,8 +41,8 @@ public class EventController {
     }
     @PutMapping("/edit")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> editBrand(@RequestBody Event brand) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit event successfully",eventService.editEvent(brand)));
+    public ResponseEntity<?> editBrand(@RequestBody Event event) {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit event successfully",eventService.editEvent(event)));
     }
 
     @DeleteMapping("/delete/{id}")

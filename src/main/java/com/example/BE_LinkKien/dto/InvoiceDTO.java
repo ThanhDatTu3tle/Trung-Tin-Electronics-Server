@@ -15,6 +15,7 @@ public class InvoiceDTO {
     private String email;
     private String content;
     private Boolean status;
+    private Boolean confirm;
     private Double total;
     private String payment;
     private List<InvoiceDetailDTO> invoiceDetail;

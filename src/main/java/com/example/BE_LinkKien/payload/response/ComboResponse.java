@@ -1,20 +1,18 @@
-package com.example.BE_LinkKien.Models;
+package com.example.BE_LinkKien.payload.response;
 
+import com.example.BE_LinkKien.Models.Combo;
+import com.example.BE_LinkKien.Models.ComboDetail;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@Table(name = "Combo")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-public class Combo {
+public class ComboResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
-    private String image;
-    private Double price;
-    private Integer discount;
+    private Combo combo;
+    private List<ComboDetail> detail;
 }
