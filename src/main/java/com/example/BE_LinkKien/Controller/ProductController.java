@@ -72,9 +72,9 @@ public class ProductController {
     public ResponseEntity<?> updateQuantity(@RequestParam String id,@RequestParam Integer quantity) {
         return ResponseEntity.ok().body(new ResponseObject("success", 200, "Edit quantity product successfully", productService.updateQuantity(id,true,quantity)));
     }
-    @PutMapping("/updateIdEvent")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateEventProduct(@RequestBody EventDTO data) {
-        return ResponseEntity.ok().body(new ResponseObject("success", 200, "Edit event for product successfully", productService.updateEventProduct(data)));
-    }
+//    @PutMapping("/updateIdEvent")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<?> updateEventProduct(@RequestBody EventDTO data) {
+//        return ResponseEntity.ok().body(new ResponseObject("success", 200, "Edit event for product successfully", productService.updateEventProduct(data)));
+//    }
 }

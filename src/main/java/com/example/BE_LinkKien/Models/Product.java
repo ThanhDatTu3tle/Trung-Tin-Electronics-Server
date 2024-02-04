@@ -26,6 +26,7 @@ public class Product {
     private Boolean status;
     private Integer discount;
     private Double promotional;
+    private Double cost;
     private Integer idBrand;
     private Integer idCategory;
     @Column(nullable = true)
@@ -67,7 +68,7 @@ public class Product {
     @JoinColumn(name ="idEvent",nullable = true,insertable = false,updatable = false)
     private Event event;
     //Combo ->product
-//    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
-//    @JoinColumn(name ="idCombo",nullable = true,insertable = false,updatable = false)
-//    private Combo combo;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @JoinColumn(name ="idCombo",nullable = true,insertable = false,updatable = false)
+    private Combo combo;
 }

@@ -19,6 +19,7 @@ public class ProductRequest {
     private Double price;
     private Integer discount;
     private Double promotional;
+    private Double cost;
     private Integer idBrand;
     private Integer idCategory;
 }

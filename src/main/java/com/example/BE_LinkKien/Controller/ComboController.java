@@ -1,9 +1,7 @@
 package com.example.BE_LinkKien.Controller;
 
 import com.example.BE_LinkKien.Models.Combo;
-import com.example.BE_LinkKien.Models.Event;
 import com.example.BE_LinkKien.Service.ComboService;
-import com.example.BE_LinkKien.Service.EventService;
 import com.example.BE_LinkKien.dto.ComboNoIdDTO;
 import com.example.BE_LinkKien.payload.response.ResponseObject;
 import org.modelmapper.ModelMapper;
@@ -40,11 +38,11 @@ public class ComboController {
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Get combo successfully",comboService.getById(id)));
     }
-    @PutMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> edit(@PathVariable Integer id,@RequestBody ComboNoIdDTO data) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit combo successfully",comboService.editCombo(id,data)));
-    }
+//    @PutMapping("/edit/{id}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<?> edit(@PathVariable Integer id,@RequestBody ComboNoIdDTO data) {
+//        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit combo successfully",comboService.editCombo(id,data)));
+//    }
     @PutMapping("/updateStatus")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateStatusCombo(@RequestParam Integer id,@RequestParam boolean status) {

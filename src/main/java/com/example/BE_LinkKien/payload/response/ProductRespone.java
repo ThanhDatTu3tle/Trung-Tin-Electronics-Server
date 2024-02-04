@@ -25,6 +25,7 @@ public class ProductRespone {
     private Boolean status;
     private Integer discount;
     private Double promotional;
+    private Double cost;
     private Category category;
     private String createdBy;
     private Timestamp createdAt;

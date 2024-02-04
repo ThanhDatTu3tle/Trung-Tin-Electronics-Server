@@ -11,5 +11,4 @@ public interface ComboDetailRepository extends JpaRepository<ComboDetail, Intege
     List<ComboDetail> findComboDetailsByIdCombo(Integer id);
 
     void deleteAllByIdCombo(Integer id);
-
 }

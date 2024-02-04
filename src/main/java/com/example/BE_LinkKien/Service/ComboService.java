@@ -1,9 +1,8 @@
 package com.example.BE_LinkKien.Service;
 
-
 import com.example.BE_LinkKien.Models.Combo;
 import com.example.BE_LinkKien.Models.ComboDetail;
-import com.example.BE_LinkKien.Models.Product;
+// import com.example.BE_LinkKien.Models.Product;
 import com.example.BE_LinkKien.Repository.ComboDetailRepository;
 import com.example.BE_LinkKien.Repository.ComboRepository;
 import com.example.BE_LinkKien.dto.ComboNoIdDTO;
@@ -90,40 +89,40 @@ public class ComboService {
         }
         return comboResponse;
     }
-    public ComboResponse editCombo(Integer id,ComboNoIdDTO data) {
-        Combo combo = comboRepository.findComboById(id);
-        if(combo != null)
-        {
-            combo.setName(data.getName());
-            combo.setImage(data.getImage());
-            combo.setPrice(data.getPrice());
-
-            Combo combo1 = comboRepository.save(combo);
-            ComboResponse comboResponse = new ComboResponse();
-            comboResponse.setCombo(combo1);
-
-            List<ComboDetail> comboDetailList = comboDetailRepository.findComboDetailsByIdCombo(combo.getId());
-            comboDetailList.forEach((e)->{
-                comboDetailRepository.deleteById(e.getId());
-            });
-
-            List<ComboDetail> comboDetailList1 = new ArrayList<>();
-
-            data.getProduct().forEach((e)->{
-                ComboDetail comboDetail = new ComboDetail();
-                comboDetail.setIdProduct(e.getIdProduct());
-                comboDetail.setIdCombo(combo1.getId());
-                comboDetail.setProductNumber(e.getQuantity());
-                ComboDetail detailSaved = comboDetailRepository.save(comboDetail);
-                comboDetailList1.add(detailSaved);
-            });
-            comboResponse.setDetail(comboDetailList1);
-
-            return  comboResponse;
-        }else {
-            throw new CustomException("Combo is not exists", HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-    }
+//    public ComboResponse editCombo(Integer id,ComboNoIdDTO data) {
+//        Combo combo = comboRepository.findComboById(id);
+//        if(combo != null)
+//        {
+//            combo.setName(data.getName());
+//            combo.setImage(data.getImage());
+//            combo.setPrice(data.getPrice());
+//
+//            Combo combo1 = comboRepository.save(combo);
+//            ComboResponse comboResponse = new ComboResponse();
+//            comboResponse.setCombo(combo1);
+//
+//            List<ComboDetail> comboDetailList = comboDetailRepository.findComboDetailsByIdCombo(combo.getId());
+//            comboDetailList.forEach((e)->{
+//                comboDetailRepository.deleteById(e.getId());
+//            });
+//
+//            List<ComboDetail> comboDetailList1 = new ArrayList<>();
+//
+//            data.getProduct().forEach((e)->{
+//                ComboDetail comboDetail = new ComboDetail();
+//                comboDetail.setIdProduct(e.getIdProduct());
+//                comboDetail.setIdCombo(combo1.getId());
+//                comboDetail.setProductNumber(e.getQuantity());
+//                ComboDetail detailSaved = comboDetailRepository.save(comboDetail);
+//                comboDetailList1.add(detailSaved);
+//            });
+//            comboResponse.setDetail(comboDetailList1);
+//
+//            return  comboResponse;
+//        }else {
+//            throw new CustomException("Combo is not exists", HttpStatus.UNPROCESSABLE_ENTITY);
+//        }
+//    }
 
     public Combo updateStatusCombo(Integer id, boolean status) {
         try{

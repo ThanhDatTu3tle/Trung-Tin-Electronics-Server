@@ -1,16 +1,23 @@
 package com.example.BE_LinkKien.Service;
 
-
-import com.example.BE_LinkKien.Models.Brand;
+import com.example.BE_LinkKien.Models.Combo;
+import com.example.BE_LinkKien.Models.ComboDetail;
 import com.example.BE_LinkKien.Models.Event;
-import com.example.BE_LinkKien.Repository.BrandRepository;
+import com.example.BE_LinkKien.Models.EventDetail;
+// import com.example.BE_LinkKien.Models.Product;
+import com.example.BE_LinkKien.Repository.EventDetailRepository;
 import com.example.BE_LinkKien.Repository.EventRepository;
+import com.example.BE_LinkKien.dto.EventDTO;
 import com.example.BE_LinkKien.exception.CustomException;
+import com.example.BE_LinkKien.payload.response.ComboResponse;
+import com.example.BE_LinkKien.payload.response.EventResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,53 +26,118 @@ import java.util.Optional;
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
-    public Event createEvent(String name, Integer discount) {
-        if(!eventRepository.existsByName(name)) {
-            Event brand = new Event();
-            brand.setName(name);
-            brand.setDiscount(discount);
-            Event brandInserted = eventRepository.save(brand);
-            return brandInserted;
+    @Autowired
+    private EventDetailRepository eventDetailRepository;
+    public EventResponse createEvent(EventDTO data) {
+        if(!eventRepository.existsByName(data.getName())) {
+            Event event = new Event();
+            event.setName(data.getName());
+            event.setImage(data.getImage());
+            event.setPrice(data.getPrice());
+            event.setCost(data.getCost());
+            event.setDiscount(data.getDiscount());
+            event.setStatus(false);
+            Event event1 = eventRepository.save(event);
+
+            EventResponse eventResponse = new EventResponse();
+            List<EventDetail> eventDetailList = new ArrayList<>();
+            eventResponse.setEvent(event1);
+            data.getProduct().forEach((e)->{
+                EventDetail eventDetail = new EventDetail();
+                eventDetail.setIdProduct(e.getIdProduct());
+                eventDetail.setIdEvent(event1.getId());
+                eventDetail.setProductNumber(e.getQuantity());
+                EventDetail detailSaved = eventDetailRepository.save(eventDetail);
+                eventDetailList.add(detailSaved);
+            });
+            eventResponse.setDetail(eventDetailList);
+
+            return eventResponse;
         }else {
             throw new CustomException("Event is exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    public List<Event> getAllEvent() {
-        List<Event> brandList = eventRepository.findAll();
-        if(brandList == null) {
+    public List<EventResponse> getAll() {
+        List<EventResponse> eventResponseList = new ArrayList<>();
+        List<Event> eventList = eventRepository.findAll();
+
+        if(eventList == null) {
             throw new CustomException("The Event list are empty", HttpStatus.NOT_FOUND);
         }
-        return brandList;
-    }
-
-    public Optional<Event> getById(Integer id){
-        Optional<Event> _brand = eventRepository.findById(id);
-        if(_brand == null) {
-            throw new CustomException("Event isn't exist", HttpStatus.NOT_FOUND);
+        else
+        {
+            eventList.forEach((e)->{
+                EventResponse eventResponse = new EventResponse();
+                List<EventDetail> eventDetail = eventDetailRepository.findEventDetailsByIdEvent(e.getId());
+                eventResponse.setEvent(e);
+                eventResponse.setDetail(eventDetail);
+                eventResponseList.add(eventResponse);
+            });
         }
-        return _brand;
+        return eventResponseList;
     }
 
-    public Event editEvent(Event body) {
-        Optional<Event> _brand = eventRepository.findById(body.getId());
-        return _brand.map(category1 -> {
-            category1.setName(body.getName());
-            category1.setDiscount(body.getDiscount());
-            Event brandInserted = eventRepository.save(category1);
-            return brandInserted;
-        }).orElseThrow(() -> new CustomException("Event not found", HttpStatus.NOT_FOUND));
+    public EventResponse getById(Integer id){
+        Event _event = eventRepository.findEventById(id);
+        EventResponse eventResponse = new EventResponse();
+        if(_event == null) {
+            throw new CustomException("Event is not exists", HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+            List<EventDetail> eventDetail = eventDetailRepository.findEventDetailsByIdEvent(_event.getId());
+            eventResponse.setEvent(_event);
+            eventResponse.setDetail(eventDetail);
+        }
+        return eventResponse;
+    }
+
+//    public Event editEvent(Event body) {
+//        Optional<Event> _brand = eventRepository.findById(body.getId());
+//        return _brand.map(category1 -> {
+//            category1.setName(body.getName());
+//            category1.setDiscount(body.getDiscount());
+//            Event brandInserted = eventRepository.save(category1);
+//            return brandInserted;
+//        }).orElseThrow(() -> new CustomException("Event not found", HttpStatus.NOT_FOUND));
+//    }
+
+    public Event updateStatusEvent(Integer id, boolean status) {
+        try{
+            if(id == null)
+            {
+                throw new CustomException("ID is null", HttpStatus.BAD_REQUEST);
+            }
+
+            Event _event = eventRepository.findEventById(id);
+            Event eventSaved = new Event();
+            if(_event !=null)
+            {
+                _event.setStatus(status);
+                eventSaved = eventRepository.save(_event);
+            } else
+            {
+                throw new CustomException("Event is not exists", HttpStatus.BAD_REQUEST);
+            }
+
+            return eventSaved;
+        } catch (Exception e) {
+            throw new CustomException("Can not update status event", HttpStatus.NOT_FOUND);
+        }
     }
 
     public void deleteEvent (Integer id){
-        if(eventRepository.existsById(id)) {
-            try {
-                eventRepository.deleteById(id);
-            } catch (Exception e) {
-                throw new CustomException("Can't delete Event", HttpStatus.NOT_FOUND);
-            }
+        Event  event = eventRepository.findEventById(id);
+        if(event != null)
+        {
+            List<EventDetail> eventDetailList = eventDetailRepository.findEventDetailsByIdEvent(event.getId());
+            eventDetailList.forEach((e)->{
+                eventDetailRepository.deleteById(e.getId());
+            });
+            eventRepository.deleteById(id);
         }else {
-            throw new CustomException("Event isn't exists", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException("Event is not exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

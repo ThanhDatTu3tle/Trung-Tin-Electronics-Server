@@ -1,9 +1,8 @@
 package com.example.BE_LinkKien.Controller;
 
-import com.example.BE_LinkKien.Models.Brand;
 import com.example.BE_LinkKien.Models.Event;
-import com.example.BE_LinkKien.Service.BrandService;
 import com.example.BE_LinkKien.Service.EventService;
+import com.example.BE_LinkKien.dto.EventDTO;
 import com.example.BE_LinkKien.payload.response.ResponseObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +26,32 @@ public class EventController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createBrand(@RequestParam String name, @RequestParam Integer discount) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully",eventService.createEvent(name,discount)));
+    public ResponseEntity<?> createEvent(@RequestBody EventDTO data) {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully",eventService.createEvent(data)));
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> getAllCategory() {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all event successfully",eventService.getAllEvent()));
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all event successfully",eventService.getAll()));
     }
     @GetMapping("/getEvent/{id}")
-    public ResponseEntity<?> getBrand(@PathVariable Integer id) {
+    public ResponseEntity<?> getById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Get event successfully",eventService.getById(id)));
     }
-    @PutMapping("/edit")
+//    @PutMapping("/edit")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<?> editBrand(@RequestBody Event event) {
+//        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit event successfully",eventService.editEvent(event)));
+//    }
+    @PutMapping("/updateStatus")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> editBrand(@RequestBody Event event) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit event successfully",eventService.editEvent(event)));
+    public ResponseEntity<?> updateStatusEvent(@RequestParam Integer id,@RequestParam boolean status) {
+        return ResponseEntity.ok().body(new ResponseObject("success", 200, "Edit status event successfully", eventService.updateStatusEvent(id,status)));
     }
-
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         eventService.deleteEvent(id);
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Delete brand successfully",null));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Delete event successfully",null));
     }
 }
