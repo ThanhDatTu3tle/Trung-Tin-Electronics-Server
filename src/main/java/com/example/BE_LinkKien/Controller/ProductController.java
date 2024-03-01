@@ -69,7 +69,7 @@ public class ProductController {
     }
     @PutMapping("/updateQuantity")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateQuantity(@RequestParam String id,@RequestParam Integer quantity) {
+    public ResponseEntity<?> updateQuantity(@RequestParam String id, @RequestParam Integer quantity) {
         return ResponseEntity.ok().body(new ResponseObject("success", 200, "Edit quantity product successfully", productService.updateQuantity(id,true,quantity)));
     }
 //    @PutMapping("/updateIdEvent")

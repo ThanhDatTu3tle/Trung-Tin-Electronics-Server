@@ -39,7 +39,6 @@ public class InvoiceController {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @PostMapping("/create")
     public ResponseEntity<?> createInvoice(@RequestBody InvoiceDTO data) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create invoice successfully",invoiceService.createInvpoce(data)));

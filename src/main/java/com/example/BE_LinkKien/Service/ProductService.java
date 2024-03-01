@@ -198,7 +198,7 @@ public class ProductService {
                     productRespone.setStatus(e.getStatus());
                     productRespone.setDiscount(e.getDiscount());
                     productRespone.setPromotional(e.getPromotional());
-                    productRespone.setPromotional(e.getCost());
+                    productRespone.setCost(e.getCost());
                     productRespone.setCreatedBy(userRepository.findUserById(e.getCreatedBy()).getEmail());
                     productRespone.setCreatedAt(e.getCreatedAt());
                     productRespone.setUpdatedBy(userRepository.findUserById(e.getUpdatedBy()).getEmail());
@@ -218,7 +218,7 @@ public class ProductService {
             Product _product = productRepository.findProductById(body.getId());
             List<Specification> specificationList = new ArrayList<>();
             List<ImageProduct> imageProductList = new ArrayList<>();
-//            _product.setId(body.getId());
+            _product.setId(body.getId());
             _product.setName(body.getName());
             _product.setDescription(body.getDescription());
             _product.setPrice(body.getPrice());
@@ -316,7 +316,7 @@ public class ProductService {
 //            throw new CustomException("Can not update event for product", HttpStatus.NOT_FOUND);
 //        }
 //    }
-    public Product updateQuantity(String id, boolean isAdd,Integer quantity) {
+    public Product updateQuantity(String id, boolean isAdd, Integer quantity) {
         try{
             if(id == null)
             {
@@ -379,12 +379,12 @@ public class ProductService {
         if(product != null) {
             try {
                 Product _product = productRepository.findProductById(product.getId());
-                if(_product ==null)
+                if(_product == null)
                 {
                     throw new CustomException("Product is not exists", HttpStatus.BAD_REQUEST);
                 }
-                List<Specification> specificationList = new ArrayList<>();
-                List<ImageProduct> imageProductList = new ArrayList<>();
+//                List<Specification> specificationList = new ArrayList<>();
+//                List<ImageProduct> imageProductList = new ArrayList<>();
 
 //            _product.setId(product.getId());
                 _product.setName(product.getName());
@@ -398,35 +398,35 @@ public class ProductService {
 //            _product.setIdEvent(null);
                 Product product1 = productRepository.save(_product);
                 //--------------------------------------------
-                List<Specification> specificationDel = specificationRepository.findAllByIdProduct(product.getId());
-                specificationDel.forEach((e)->{
-                    e.setProduct(null);
-                    specificationRepository.save(e);
-                    specificationRepository.deleteById(e.getId());
-                });
-                List<ImageProduct> imageProductsDel = imagePeoductRepository.findAllByIdProduct(product.getId());
-                imageProductsDel.forEach((e)->{
-                    e.setProduct(null);
-                    imagePeoductRepository.save(e);
-                    imagePeoductRepository.deleteById(e.getId());
-                });
+//                List<Specification> specificationDel = specificationRepository.findAllByIdProduct(product.getId());
+//                specificationDel.forEach((e)->{
+//                    e.setProduct(null);
+//                    specificationRepository.save(e);
+//                    specificationRepository.deleteById(e.getId());
+//                });
+//                List<ImageProduct> imageProductsDel = imagePeoductRepository.findAllByIdProduct(product.getId());
+//                imageProductsDel.forEach((e)->{
+//                    e.setProduct(null);
+//                    imagePeoductRepository.save(e);
+//                    imagePeoductRepository.deleteById(e.getId());
+//                });
                 //--------------------------------------------
 
-                product.getSpecification().forEach((e)->{
-                    Specification specification = new Specification();
-                    specification.setSpecification(e);
-                    specification.setIdProduct(product.getId());
-                    specificationList.add(specification);
-                });
-                specificationRepository.saveAll(specificationList);
-
-                product.getImageProducts().forEach((e)->{
-                    ImageProduct imageProduct = new ImageProduct();
-//                    imageProduct.setImage(e.getImage());
-                    imageProduct.setIdProduct(product.getId());
-                    imageProductList.add(imageProduct);
-                });
-                imagePeoductRepository.saveAll(imageProductList);
+//                product.getSpecification().forEach((e)->{
+//                    Specification specification = new Specification();
+//                    specification.setSpecification(e);
+//                    specification.setIdProduct(product.getId());
+//                    specificationList.add(specification);
+//                });
+//                specificationRepository.saveAll(specificationList);
+//
+//                product.getImageProducts().forEach((e)->{
+//                    ImageProduct imageProduct = new ImageProduct();
+////                    imageProduct.setImage(e.getImage());
+//                    imageProduct.setIdProduct(product.getId());
+//                    imageProductList.add(imageProduct);
+//                });
+//                imagePeoductRepository.saveAll(imageProductList);
                 return product1;
             } catch (Exception e){
                 throw new CustomException("Can't update product", HttpStatus.INTERNAL_SERVER_ERROR);
