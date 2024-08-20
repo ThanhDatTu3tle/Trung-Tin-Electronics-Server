@@ -62,6 +62,7 @@ public class Product {
     //Category->product
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name ="idCategory",nullable = true,insertable = false,updatable = false)
+
     private Category category;
     //Event->product
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)

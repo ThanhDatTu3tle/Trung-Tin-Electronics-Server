@@ -14,31 +14,32 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/event")
 public class EventController {
-
-    private final EventService eventService;
-
     @Autowired
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
-    }
+    private EventService eventService;
+
     @Autowired
     private ModelMapper modelMapper;
+
+//    @Autowired
+//    public EventController(EventService eventService) {
+//        this.eventService = eventService;
+//    }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createEvent(@RequestBody EventDTO data) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully",eventService.createEvent(data)));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Create event successfully", eventService.createEvent(data)));
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all event successfully",eventService.getAll()));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all event successfully", eventService.getAll()));
     }
     @GetMapping("/getEvent/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get event successfully",eventService.getById(id)));
+        return ResponseEntity.ok().body(new ResponseObject("success",200, "Get event successfully", eventService.getById(id)));
     }
-//    @PutMapping("/edit")
+    //    @PutMapping("/edit")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    public ResponseEntity<?> editBrand(@RequestBody Event event) {
 //        return ResponseEntity.ok().body(new ResponseObject("success",200, "Edit event successfully",eventService.editEvent(event)));

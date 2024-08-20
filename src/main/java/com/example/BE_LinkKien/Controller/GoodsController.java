@@ -42,12 +42,12 @@ public class GoodsController {
     private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createInvoice(@RequestBody GoodsDTO data) {
+    public ResponseEntity<?> createGoods(@RequestBody GoodsDTO data) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create goods successfully",goodsService.createGoods(data)));
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAllGoods() {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Get all goods successfully",goodsService.getAllGoods()));
     }

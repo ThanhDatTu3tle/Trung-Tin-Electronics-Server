@@ -29,18 +29,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/invoice")
 public class InvoiceController {
-
+    @Autowired
     private final InvoiceService invoiceService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     public InvoiceController(InvoiceService invoiceService) {
         this.invoiceService = invoiceService;
     }
-    @Autowired
-    private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createInvoice(@RequestBody InvoiceDTO data) {
+    public ResponseEntity<?> createInvpoce(@RequestBody InvoiceDTO data) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Create invoice successfully",invoiceService.createInvpoce(data)));
     }
 
@@ -51,18 +52,18 @@ public class InvoiceController {
     }
     @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getInvoice(@PathVariable Integer id) {
+    public ResponseEntity<?> getInvoiceById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Get invoice successfully",invoiceService.getInvoiceById(id)));
     }
     @PutMapping("/updateStatus")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateStatus(@RequestParam Integer id,@RequestParam boolean status) {
+    public ResponseEntity<?> updateStatusInvoice(@RequestParam Integer id,@RequestParam boolean status) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Update status successfully",invoiceService.updateStatusInvoice(id,status)));
     }
 
     @PutMapping("/updateConfirm")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateConfirm(@RequestParam Integer id,@RequestParam boolean confirm) {
+    public ResponseEntity<?> updaupdateConfirmInvoiceteConfirm(@RequestParam Integer id,@RequestParam boolean confirm) {
         return ResponseEntity.ok().body(new ResponseObject("success",200, "Update confirm successfully",invoiceService.updateConfirmInvoice(id,confirm)));
     }
 }

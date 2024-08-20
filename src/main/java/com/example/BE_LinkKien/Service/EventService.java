@@ -1,7 +1,5 @@
 package com.example.BE_LinkKien.Service;
 
-import com.example.BE_LinkKien.Models.Combo;
-import com.example.BE_LinkKien.Models.ComboDetail;
 import com.example.BE_LinkKien.Models.Event;
 import com.example.BE_LinkKien.Models.EventDetail;
 // import com.example.BE_LinkKien.Models.Product;
@@ -9,17 +7,14 @@ import com.example.BE_LinkKien.Repository.EventDetailRepository;
 import com.example.BE_LinkKien.Repository.EventRepository;
 import com.example.BE_LinkKien.dto.EventDTO;
 import com.example.BE_LinkKien.exception.CustomException;
-import com.example.BE_LinkKien.payload.response.ComboResponse;
 import com.example.BE_LinkKien.payload.response.EventResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,24 +53,24 @@ public class EventService {
         }
     }
 
-    public List<EventResponse> getAll() {
-        List<EventResponse> eventResponseList = new ArrayList<>();
+    public List<Event> getAll() {
+        // List<EventResponse> eventResponseList = new ArrayList<>();
         List<Event> eventList = eventRepository.findAll();
 
         if(eventList == null) {
             throw new CustomException("The Event list are empty", HttpStatus.NOT_FOUND);
         }
-        else
-        {
-            eventList.forEach((e)->{
-                EventResponse eventResponse = new EventResponse();
-                List<EventDetail> eventDetail = eventDetailRepository.findEventDetailsByIdEvent(e.getId());
-                eventResponse.setEvent(e);
-                eventResponse.setDetail(eventDetail);
-                eventResponseList.add(eventResponse);
-            });
-        }
-        return eventResponseList;
+//        else
+//        {
+//            eventList.forEach((e)->{
+//                EventResponse eventResponse = new EventResponse();
+//                List<EventDetail> eventDetail = eventDetailRepository.findEventDetailsByIdEvent(e.getId());
+//                eventResponse.setEvent(e);
+//                eventResponse.setDetail(eventDetail);
+//                eventResponseList.add(eventResponse);
+//            });
+//        }
+        return eventList;
     }
 
     public EventResponse getById(Integer id){
